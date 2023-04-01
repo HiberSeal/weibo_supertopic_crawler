@@ -50,8 +50,8 @@ def crawler(since_id=None):
             if json_result['ok'] == 0:
                 print('到达最后一页')
                 return False
-            # since_id = str(json_result['data']['pageInfo']['since_id'])
-            # print('下次since_id:', since_id)
+            since_id = str(json_result['data']['pageInfo']['since_id'])
+            print('下次since_id:', since_id)
             # 这里默认处理的都是card_type=9
             cards = json_result['data']['cards']
             cards_count = len(cards)
@@ -62,10 +62,11 @@ def crawler(since_id=None):
                 userid = mblog['user']['id']
                 bid = mblog['bid']
                 weibo_url = "https://weibo.com/" + str(userid) + "/" + bid
-                exist_sql = "SELECT EXISTS(SELECT 1 FROM wbsupertopic WHERE weibo_url = '{}');".format(weibo_url)
+                exist_sql = "SELECT EXISTS(SELECT 1 FROM weibo_supertopic WHERE weibo_url = '{}');".format(weibo_url)
                 cur.execute(exist_sql)
                 exist_result = cur.fetchone()
-                # 数据库中已存在weibo_url与之一致的数据, 返回False, 结束循环
+                # 数据库中已存在weibo_url与之一致的数据, 返回False, 结束循环;
+                # 也可将以下三行注释，则会继续检查在该条已入库数据，之后的数据，是否均已入库
                 if exist_result[0] == 1:
                     print('数据库中数据已存在')
                     return False, ''
@@ -87,7 +88,7 @@ def crawler(since_id=None):
                     if content[:8] == '<a  href':
                         content = content[427:]
                     # 数据入库
-                    insert_sql = "INSERT INTO wbsupertopic(post_time, poster, region, content, reposts_count, comments_count, attitudes_count, weibo_url) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
+                    insert_sql = "INSERT INTO weibo_supertopic(post_time, poster, region, content, reposts_count, comments_count, attitudes_count, weibo_url) VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
                     data = (post_time, poster, region_name, content, reposts_count, comments_count, attitudes_count, weibo_url)
                     cur.execute(insert_sql, data)
                     con.commit()
@@ -104,7 +105,7 @@ def crawler(since_id=None):
 
 if __name__ == '__main__':
     start_time = time.time()
-    for page in range(99999):
+    for page in range(2):
         if page == 0:
             # the_tuple = crawler('4858615070197709') # 卡在此处
             the_tuple = crawler()
