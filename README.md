@@ -1,4 +1,4 @@
-# wbsupertopic_crawler
+# weibo_supertopic_crawler
 
 新浪微博超级话题内微博相关数据爬取，一个特别简单的程序，就一个python文件crawler.py。
 
@@ -37,7 +37,7 @@ HTTP GET请求headers里的**Referer**，params里的**extparam**、**containeri
 也在这里记录下数据表的DDL
 
 ```sql
-CREATE TABLE `rosemin`.`wbsupertopic`  (
+CREATE TABLE `rosemin`.`weibo_supertopic`  (
   `post_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '发布时间',
   `poster` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '发布人',
   `region` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地区',
