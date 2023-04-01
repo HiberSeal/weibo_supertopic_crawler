@@ -105,7 +105,7 @@ def crawler(since_id=None):
 
 if __name__ == '__main__':
     start_time = time.time()
-    for page in range(2):
+    for page in range(99999):
         if page == 0:
             # the_tuple = crawler('4858615070197709') # 卡在此处
             the_tuple = crawler()
